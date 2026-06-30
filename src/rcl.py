@@ -29,17 +29,44 @@ def validate(spine):
                     bad.append((occ["id"], rk))
     return bad
 
+REST_OF_CHAPTER = 10 ** 6  # sentinel "to end of chapter" for the verse overlap index
+
+
+def chapter_query_spans(refKey):
+    """Yield (book, chapter, vlo, vhi) overlap windows covering a refKey.
+
+    A cross-chapter range (Jonah.3.10-Jonah.4.11) MUST be expanded across every
+    chapter it spans — the (book, chapter, v_start, v_end) overlap index keys on a
+    single chapter, so an unexpanded cross-chapter query only ever matches the START
+    chapter and silently drops everything in the later chapter(s)."""
+    p = osis.parse_refkey(refKey)
+    if not p:
+        return []
+    book = p["book"]
+    if not p["cross_chapter"]:
+        if (p["v_start"] or 0) == 0:                       # whole chapter
+            return [(book, p["chapter"], 0, REST_OF_CHAPTER)]
+        return [(book, p["chapter"], p["v_start"], p["v_end_true"] or p["v_start"])]
+    spans = []
+    for c in range(p["chapter"], p["c_end"] + 1):
+        if c == p["chapter"]:
+            spans.append((book, c, p["v_start"] or 0, REST_OF_CHAPTER))   # start verse → end of ch
+        elif c == p["c_end"]:
+            spans.append((book, c, 0, p["v_end_true"] or REST_OF_CHAPTER))  # ch start → end verse
+        else:
+            spans.append((book, c, 0, REST_OF_CHAPTER))                   # whole middle chapter
+    return spans
+
+
 def resolve_reading(con, reading):
-    """All reception rows overlapping any span of a reading."""
+    """All reception rows overlapping any span of a reading (cross-chapter aware)."""
     out = []
     for rk in reading_refkeys(reading):
-        p = osis.parse_refkey(rk)
-        if not p:
-            continue
-        rows = con.execute("""SELECT source,author,refDisplay,mode,text FROM reception
-            WHERE book=? AND chapter=? AND ((v_start=0 AND v_end=0) OR (v_start<=? AND v_end>=?))""",
-            (p["book"], p["chapter"], p["v_end"] or p["v_start"] or 999, p["v_start"] or 0)).fetchall()
-        out.extend(rows)
+        for book, ch, vlo, vhi in chapter_query_spans(rk):
+            rows = con.execute("""SELECT source,author,refDisplay,mode,text FROM reception
+                WHERE book=? AND chapter=? AND ((v_start=0 AND v_end=0) OR (v_start<=? AND v_end>=?))""",
+                (book, ch, vhi, vlo)).fetchall()
+            out.extend(rows)
     return out
 
 def main():

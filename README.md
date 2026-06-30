@@ -8,7 +8,7 @@ Built to the **Wroot data-repository standard** (see `~/.claude/.../memory/refer
 dual `refKey` (OSIS, KJV/WEB versification) + `refDisplay`; SQLite source-of-truth; source-first ingest;
 attributions come from retrieved text, never model recall.
 
-## Store: `data/reception.sqlite` — table `reception` (83,433 rows as of 2026-06-30)
+## Store: `data/reception.sqlite` — table `reception` (101,353 rows as of 2026-06-30)
 
 | column | meaning |
 |---|---|
@@ -29,13 +29,15 @@ attributions come from retrieved text, never model recall.
 | `barnes` (Albert Barnes) | index | 8,207 | NT (27) |
 | `calvin` | index | 14,052 | Calvin's canon subset |
 | `catena` (intertextual echoes) | text | 18,495 | both directions, from `catena-echoes.jsonl` |
+| `wesley-notes` (John Wesley, *Explanatory Notes*) | text | 17,920 | 66 books (OT Notes abridged) — the Wesley RCL companion backbone |
 
 ## Scripts (`src/`)
 - **`osis.py`** — shared OSIS module; Python mirror of Catena's `lib/osis.ts` (refKey grammar, cross-chapter, parse/display). Import this; don't reinvent reference handling.
 - **`ingest_catena_matthew.py`** — Catena Aurea (Matthew) full-text, from `cache/catena1.thml.xml`. Bounded author alias table; continuations merged; validated vs source.
 - **`ingest_commentary_index.py`** — generic CCEL-ThML index ingester (JFB/Henry/Barnes/Calvin) via `<scripCom osisRef=…>`; + lazy `pull_text(source, anchor)`. Idempotent (deletes mode=index then re-inserts).
 - **`ingest_catena_echoes.py`** — Catena open-data echoes → both-direction reception rows.
-- **`rcl.py`** — RCL spine loader/validator/resolver. Importable by Lectern + Catena-WS3.
+- **`ingest_wesley_notes.py`** — John Wesley's *Explanatory Notes* (verse-keyed, mode=text) from in-house `~/kjv-wesley/data/notes/*.json` (PD; CCEL upstream). The **Wesley RCL companion** backbone: 96% of RCL readings (1,150/1,188) resolve a Wesley note; gaps = 19 Apocrypha + 7 OT/NT passages Wesley left unannotated (honest, not silent). Idempotent on `source='wesley-notes'`.
+- **`rcl.py`** — RCL spine loader/validator/resolver. Importable by Lectern + Catena-WS3. `resolve_reading` is **cross-chapter aware** (`chapter_query_spans` expands e.g. `Jonah.3.10-Jonah.4.11` across every spanned chapter — the single-chapter overlap index would otherwise drop the later chapter).
 - **`build_rcl.py`** — rebuilds `data/rcl.json` from the cached Vanderbilt xlsx (full A/B/C). **`validate_rcl.py`** — fidelity gate (run after any rebuild).
 
 ## Spine: `data/rcl.json` — the shared lectionary calendar
