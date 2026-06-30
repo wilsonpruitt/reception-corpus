@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Generated exports (re-derivable from the store / ingest)
+out/
+
+# Raw source downloads — ~197MB of CCEL ThML, Calvin/Barnes/etc. Re-fetchable,
+# never re-hammered (build is free from cache). Not tracked.
+cache/*
+# …except the small authoritative RCL source files + the Advent-A regression
+# reference, which build_rcl.py / validate_rcl.py need to run from a clone.
+!cache/rcl_year_A.xlsx
+!cache/rcl_year_B.xlsx
+!cache/rcl_year_C.xlsx
+!cache/rcl.json.hand-advent-a.bak
