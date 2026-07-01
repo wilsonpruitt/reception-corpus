@@ -92,6 +92,14 @@ def beta_to_uni(beta: str) -> str:
     return _c.beta_to_uni(beta)
 
 
+def lex_slug(lex_key: str) -> str:
+    """ASCII-safe filename slug for a lexKey: hex of its NFC-UTF8 bytes. Greek filenames don't
+    survive Vercel's static routing (percent-encoded UTF-8 paths don't match, and macOS stores
+    names NFD), so per-lemma lexicon files are named by this slug. The web client computes the
+    identical slug (TextEncoder over the NFC lemma → hex) to fetch them."""
+    return unicodedata.normalize("NFC", lex_key).encode("utf-8").hex()
+
+
 if __name__ == "__main__":  # quick self-test
     assert morph_label("N-", "----NSF-") == "noun · nominative singular feminine"
     assert parse_label("-PAPGSM-") == "present active participle genitive singular masculine"

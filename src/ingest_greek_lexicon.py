@@ -219,10 +219,9 @@ def main():
             "midliddell": {"gloss": ml[1], "html": ml[2]} if ml else None,
             "lsj": {"gloss": lsj[1], "html": lsj[2]} if lsj else None,
         }
-        # Filename is the RAW Greek lexKey. The static host percent-decodes the request path
-        # once, so the on-disk name must be the decoded form; the client fetches with
-        # encodeURIComponent(lexKey). (A pre-encoded filename would need double-encoding to serve.)
-        (ENTRY_DIR / f"{lexKey}.json").write_text(
+        # Filename is an ASCII slug (hex of NFC-UTF8 bytes) — Greek filenames don't survive
+        # Vercel static routing. The client computes the same slug to fetch. See greek.lex_slug.
+        (ENTRY_DIR / f"{greek.lex_slug(lexKey)}.json").write_text(
             json.dumps(entry, ensure_ascii=False), encoding="utf-8")
 
     (OUT_DIR / "short-glosses.json").write_text(
