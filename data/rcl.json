@@ -191,11 +191,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "Luke.2.1-Luke.2.7",
+          "refKey": "Luke.2.8-Luke.2.20",
           "refDisplay": "Luke 2:(1-7), 8-20",
           "refKeys": [
-            "Luke.2.1-Luke.2.7",
-            "Luke.2.8-Luke.2.20"
+            "Luke.2.8-Luke.2.20",
+            "Luke.2.1-Luke.2.7"
           ],
           "multi": true
         }
@@ -359,11 +359,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "John.1.1-John.1.9",
+          "refKey": "John.1.10-John.1.18",
           "refDisplay": "John 1:(1-9), 10-18",
           "refKeys": [
-            "John.1.1-John.1.9",
-            "John.1.10-John.1.18"
+            "John.1.10-John.1.18",
+            "John.1.1-John.1.9"
           ],
           "multi": true
         }
@@ -2022,11 +2022,11 @@
         },
         {
           "role": "psalm",
-          "refKey": "Ps.65.1-Ps.65.8",
+          "refKey": "Ps.65.9-Ps.65.13",
           "refDisplay": "Psalm 65:(1-8), 9-13",
           "refKeys": [
-            "Ps.65.1-Ps.65.8",
-            "Ps.65.9-Ps.65.13"
+            "Ps.65.9-Ps.65.13",
+            "Ps.65.1-Ps.65.8"
           ],
           "multi": true,
           "track": "complementary"
@@ -2323,11 +2323,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "Matt.15.10-Matt.15.20",
+          "refKey": "Matt.15.21-Matt.15.28",
           "refDisplay": "Matthew 15: (10-20), 21-28",
           "refKeys": [
-            "Matt.15.10-Matt.15.20",
-            "Matt.15.21-Matt.15.28"
+            "Matt.15.21-Matt.15.28",
+            "Matt.15.10-Matt.15.20"
           ],
           "multi": true
         }
@@ -2542,11 +2542,11 @@
         },
         {
           "role": "psalm",
-          "refKey": "Ps.103.1-Ps.103.7",
+          "refKey": "Ps.103.8-Ps.103.13",
           "refDisplay": "Psalm 103:(1-7), 8-13",
           "refKeys": [
-            "Ps.103.1-Ps.103.7",
-            "Ps.103.8-Ps.103.13"
+            "Ps.103.8-Ps.103.13",
+            "Ps.103.1-Ps.103.7"
           ],
           "multi": true,
           "track": "complementary"
@@ -3368,11 +3368,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "Luke.2.1-Luke.2.7",
+          "refKey": "Luke.2.8-Luke.2.20",
           "refDisplay": "Luke 2:(1-7), 8-20",
           "refKeys": [
-            "Luke.2.1-Luke.2.7",
-            "Luke.2.8-Luke.2.20"
+            "Luke.2.8-Luke.2.20",
+            "Luke.2.1-Luke.2.7"
           ],
           "multi": true
         }
@@ -3536,11 +3536,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "John.1.1-John.1.9",
+          "refKey": "John.1.10-John.1.18",
           "refDisplay": "John 1:(1-9), 10-18",
           "refKeys": [
-            "John.1.1-John.1.9",
-            "John.1.10-John.1.18"
+            "John.1.10-John.1.18",
+            "John.1.1-John.1.9"
           ],
           "multi": true
         }
@@ -5023,13 +5023,13 @@
       "readings": [
         {
           "role": "first",
-          "refKey": "1Sam.17.1",
+          "refKey": "1Sam.17.32-1Sam.17.49",
           "refDisplay": "1 Samuel 17:(1a, 4-11, 19-23), 32-49",
           "refKeys": [
+            "1Sam.17.32-1Sam.17.49",
             "1Sam.17.1",
             "1Sam.17.4-1Sam.17.11",
-            "1Sam.17.19-1Sam.17.23",
-            "1Sam.17.32-1Sam.17.49"
+            "1Sam.17.19-1Sam.17.23"
           ],
           "multi": true,
           "track": "semicontinuous"
@@ -5478,13 +5478,13 @@
       "readings": [
         {
           "role": "first",
-          "refKey": "1Kgs.8.1",
+          "refKey": "1Kgs.8.22-1Kgs.8.30",
           "refDisplay": "1 Kings 8:(1,6,10-11), 22-30, 41-43",
           "refKeys": [
+            "1Kgs.8.22-1Kgs.8.30",
             "1Kgs.8.1",
             "1Kgs.8.6",
             "1Kgs.8.10-1Kgs.8.11",
-            "1Kgs.8.22-1Kgs.8.30",
             "1Kgs.8.41-1Kgs.8.43"
           ],
           "multi": true,
@@ -6511,11 +6511,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "Luke.2.1-Luke.2.7",
+          "refKey": "Luke.2.8-Luke.2.20",
           "refDisplay": "Luke 2:(1-7), 8-20",
           "refKeys": [
-            "Luke.2.1-Luke.2.7",
-            "Luke.2.8-Luke.2.20"
+            "Luke.2.8-Luke.2.20",
+            "Luke.2.1-Luke.2.7"
           ],
           "multi": true
         }
@@ -6684,11 +6684,11 @@
         },
         {
           "role": "gospel",
-          "refKey": "John.1.1-John.1.9",
+          "refKey": "John.1.10-John.1.18",
           "refDisplay": "John 1:(1-9), 10-18",
           "refKeys": [
-            "John.1.1-John.1.9",
-            "John.1.10-John.1.18"
+            "John.1.10-John.1.18",
+            "John.1.1-John.1.9"
           ],
           "multi": true
         }
@@ -8277,11 +8277,11 @@
         },
         {
           "role": "second",
-          "refKey": "Gal.6.1-Gal.6.6",
+          "refKey": "Gal.6.7-Gal.6.16",
           "refDisplay": "Galatians 6:(1-6), 7-16",
           "refKeys": [
-            "Gal.6.1-Gal.6.6",
-            "Gal.6.7-Gal.6.16"
+            "Gal.6.7-Gal.6.16",
+            "Gal.6.1-Gal.6.6"
           ],
           "multi": true
         },

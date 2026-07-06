@@ -70,32 +70,60 @@ def parse_locator(loc: str):
     if not loc:
         raise ValueError("empty locator")
 
-    # Fold parentheses into ordinary, comma-separated segments.
-    #   "1:1-9a (9b-12)" -> "1:1-9a, 9b-12"   "2:(1-7), 8" -> "2:, 1-7, 8"
-    loc = re.sub(r"\s*\(", ", ", loc).replace(")", "")
+    # Fold parentheses into ordinary, comma-separated segments, tagging what was
+    # inside them with sentinels so optionality survives the later split-on-comma
+    # (RCL locators don't nest parens, so open/close pair up in encounter order).
+    #   "1:1-9a (9b-12)" -> "1:1-9a, @OPT@9b-12@END@"
+    #   "2:(1-7), 8"      -> "2:, @OPT@1-7@END@, 8"
+    loc = re.sub(r"\s*\(", ", @OPT@", loc).replace(")", "@END@")
+
+    def split_optional(seg):
+        starts = seg.startswith("@OPT@")
+        if starts:
+            seg = seg[len("@OPT@"):]
+        ends = seg.endswith("@END@")
+        if ends:
+            seg = seg[: -len("@END@")]
+        return seg, starts, ends
 
     # No ':' anywhere -> pure chapter reference(s).
     if ":" not in loc:
         spans = []
+        optional = False
         for seg in re.split(r"[;,]", loc):
             seg = seg.strip()
             if not seg:
                 continue
+            seg, starts, ends = split_optional(seg)
+            if starts:
+                optional = True
+            seg = seg.strip()
+            if not seg:
+                if ends:
+                    optional = False
+                continue
             if "-" in seg:
                 a, b = seg.split("-", 1)
-                spans.append((_vnum(a), 0, _vnum(b), 0))
+                spans.append((_vnum(a), 0, _vnum(b), 0, optional))
             else:
                 c = _vnum(seg)
-                spans.append((c, 0, c, 0))
+                spans.append((c, 0, c, 0, optional))
+            if ends:
+                optional = False
         return spans
 
     # Verse mode: walk ';'/',' segments, tracking the current chapter.
     spans = []
     cur = None
+    optional = False
     for seg in re.split(r"[;,]", loc):
         seg = seg.strip()
         if not seg:
             continue
+        seg, starts, ends = split_optional(seg)
+        if starts:
+            optional = True
+        seg = seg.strip()
         # A leading "chapter:" sets the current chapter — but only when the colon
         # precedes any "-" (else the colon belongs to a cross-chapter range END,
         # e.g. "22-22:5" = v22 of cur chapter through chapter 22 verse 5).
@@ -104,6 +132,8 @@ def parse_locator(loc: str):
             cur = int(cpart.strip())
             seg = seg.strip()
             if not seg:                      # e.g. "2:" produced by paren-folding
+                if ends:
+                    optional = False
                 continue
         if cur is None:
             raise ValueError(f"verse segment before any chapter in {loc!r}")
@@ -113,17 +143,19 @@ def parse_locator(loc: str):
             if ":" in b:                     # cross-chapter end "10:8"
                 ec, ev = b.split(":")
                 ec = int(ec.strip())
-                spans.append((cur, v1, ec, _vnum(ev)))
+                spans.append((cur, v1, ec, _vnum(ev), optional))
                 cur = ec
             else:
-                spans.append((cur, v1, cur, _vnum(b)))
+                spans.append((cur, v1, cur, _vnum(b), optional))
         else:
             v = _vnum(seg)
-            spans.append((cur, v, cur, v))
+            spans.append((cur, v, cur, v, optional))
+        if ends:
+            optional = False
     return spans
 
 
-def span_to_refkey(code, c1, v1, c2, v2) -> str:
+def span_to_refkey(code, c1, v1, c2, v2, optional=False) -> str:
     if v1 == 0 and v2 == 0:
         return osis.build_refkey(code, c1) if c1 == c2 else osis.build_refkey(code, c1, None, c2, None)
     if c1 == c2 and v1 == v2:
@@ -148,8 +180,16 @@ def parse_citation(text: str) -> dict:
     disp = text
     for pat, repl in DISPLAY_FIX.items():
         disp = re.sub(pat, repl, disp)
-    out = {"refKey": refkeys[0], "refDisplay": disp}
-    if len(refkeys) > 1:
+    # Primary refKey = the first REQUIRED span, not just spans[0] — an optional
+    # parenthetical bracket can parse first in the locator (e.g. "John 1:(1-9),
+    # 10-18" or "Matthew 15: (10-20), 21-28"), and the required text is the one
+    # actually preached / joined against downstream (Turn, lenses, etc).
+    primary = next((i for i, s in enumerate(spans) if not s[-1]), 0)
+    out = {"refKey": refkeys[primary], "refDisplay": disp}
+    if primary != 0:
+        out["refKeys"] = [refkeys[primary]] + refkeys[:primary] + refkeys[primary + 1:]
+        out["multi"] = True
+    elif len(refkeys) > 1:
         out["refKeys"] = refkeys
         out["multi"] = True
     return out
