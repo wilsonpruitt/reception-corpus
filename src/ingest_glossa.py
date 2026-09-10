@@ -174,13 +174,39 @@ PSALM_RE = re.compile(
 HEBREWS_SUFFIX_RE = re.compile(r"according to the hebrews|secundum hebraeos", re.I)
 COMBINED_CHAPTERS_RE = re.compile(r"^CHAPTERS\b", re.I)  # e.g. "CHAPTERS XLII, XLIII."
 
+# A verse number is normally arabic ("9", "1-10"), but a handful of chunks print
+# a roman numeral instead ("VERS. VI.--", "VERS. II.--" -- ~2 addresses total).
+# The usual separator after the number is "--", but ~30 addresses across the
+# corpus (different translation stints) print only a bare period before the
+# lemma's opening *asterisk* or <<guillemet>> -- the lookahead alternative below
+# catches those without opening the regex up to arbitrary "VERS." mentions in
+# running prose (e.g. "Migne's own lemma at VERS. 3 below prints..."), because
+# prose never has a lemma marker sitting immediately after the number.
+_VNUM = r"(?:[0-9]+|[IVXLCDM]+)"
 VERS_RE = re.compile(
-    r"VERS\.\s*((?:[0-9]+(?:\s*[,\-]\s*[0-9]+)*)?)\.?\s*--", re.I)
+    r"VERS\.\s*((?:" + _VNUM + r"(?:\s*[,\-.]\s*" + _VNUM + r")*)?)"
+    r"\.?\s*(?:--|(?=[ \t]*[*\u00ab]))", re.I)
 
 NOTE_N_RE = re.compile(r"\[n:\s*(.*?)\]", re.S)
 NOTE_VAR_RE = re.compile(r"\[var:\s*.*?\]", re.S)
 NOTE_OTHER_RE = re.compile(r"\[(?:cj|d|ed|nt|sic):\s*(.*?)\]", re.S)
 COLUMN_RE = re.compile(r"\[(\d{4}[A-D])\]")
+
+# Two structural oddities fixed by normalizing the raw text before VERS_RE ever
+# runs (rather than special-casing them in the regex):
+#   - "[sic: VERS. 9.]-- *The proud...*" -- 6 places print the address ITSELF
+#     inside a [sic: ...] editorial bracket (flagging Migne's own numbering as
+#     unusual); unwrap so the bare address is where VERS_RE expects it.
+#   - "VERS.--1. *Send forth...*" -- 1 place prints the dashes BEFORE the
+#     number instead of after; swap them into the normal order.
+_SIC_VERS_RE = re.compile(r"\[sic:\s*\*?(VERS\.\s*[0-9IVXLCDMivxlcdm]+\.?)\*?\]", re.I)
+_SWAPPED_DASH_RE = re.compile(r"VERS\.--(\d+)\.?", re.I)
+
+
+def normalize_vers_markup(text: str) -> str:
+    text = _SIC_VERS_RE.sub(lambda m: m.group(1), text)
+    text = _SWAPPED_DASH_RE.sub(lambda m: f"VERS. {m.group(1)}.--", text)
+    return text
 
 
 def clean_text(s: str) -> tuple[str, str | None]:
@@ -199,7 +225,14 @@ def clean_text(s: str) -> tuple[str, str | None]:
 def parse_vers_list(numlist: str) -> tuple[int, int] | None:
     if not numlist.strip():
         return None
-    nums = [int(x) for x in re.split(r"[,\-]", numlist) if x.strip()]
+    nums = []
+    for x in re.split(r"[,\-.]", numlist):
+        x = x.strip()
+        if not x:
+            continue
+        n = int(x) if x.isdigit() else roman_to_int(x)
+        if n is not None:
+            nums.append(n)
     if not nums:
         return None
     return min(nums), max(nums)
@@ -227,6 +260,7 @@ def parse_work(idno: str, code: str, skip: Skip):
     for f in files:
         raw = f.read_text(encoding="utf-8")
         body = raw.split("---", 2)[-1] if raw.startswith("---") else raw
+        body = normalize_vers_markup(body)
         # split into (heading, block) segments; text before the first heading in a
         # chunk continues whatever heading was open at the end of the PREVIOUS chunk.
         pieces = HEAD_RE.split(body)
