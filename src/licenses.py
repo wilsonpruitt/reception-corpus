@@ -6,8 +6,8 @@
 Licence is a function of the source, so data/licenses.tsv (one row per source) is loaded into a
 `licenses` table and the view `reception_licensed` gives every row its licence. Re-run after any
 ingest; it fails loudly if a source has no licence row.
-The compilation itself (refKey normalization, the overlap columns, the joins) is CC BY 4.0, as
-LICENSE says.
+The compilation itself (refKey normalization, the overlap columns, the joins) is CC BY-NC 4.0,
+as LICENSE says (Wilson, 2026-09-10 and 2026-11-10).
 """
 import csv, os, sqlite3, sys
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

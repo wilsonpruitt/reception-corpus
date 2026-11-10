@@ -2,22 +2,31 @@ RECEPTION CORPUS — RIGHTS AND REUSE
 Copyright © 2026 Wilson Pruitt. A Wroot Press work; Wroot Press is an
 imprint of Wroot Labs LLC (Texas).
 
+This is an aggregate. Each row's licence follows its source and is given per
+row by the view `reception_licensed` (data/reception.sqlite), from
+data/licenses.tsv. Rows under someone else's licence keep it: the licence in
+section 2 covers this project's own work, not theirs.
+
 1. PUBLIC DOMAIN — NOT CLAIMED
 
 Public-domain source texts reproduced here are not claimed. A faithful
 transcription of a public-domain text creates no new copyright, and none is
-asserted. Anyone may take the source text and do anything with it.
+asserted. Anyone may take the source text and do anything with it. That
+covers JFB, Matthew Henry, Barnes, Calvin, the Catena aurea in the Oxford
+translation, and Wesley's Explanatory Notes. Rows from JFB, Henry, Barnes
+and Calvin store locations only.
 
 2. LICENSED — CC BY-NC 4.0
 
 This project's original work is licensed under the Creative Commons
 Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0):
 
-  (a) the English translations and original prose;
-  (b) the editorial apparatus — notes, introductions, essays;
-  (c) the structured data — its selection, arrangement, encoding,
-      identifiers, and segmentation;
-  (d) the site code, design, and build scripts.
+  (a) the structured data — its selection, arrangement, encoding,
+      identifiers, verse keys and their normalization, the overlap columns,
+      and the RCL normalization;
+  (b) the in-house English of the Glossa ordinaria (source: glossa-ordinaria
+      rows, from migne.app);
+  (c) the code and build scripts.
 
 Legal code: https://creativecommons.org/licenses/by-nc/4.0/legalcode
 
@@ -26,9 +35,11 @@ including for commercial models.
 
 3. THIRD-PARTY MATERIAL
 
-Material from other sources — digitizations, datasets, quoted modern texts —
-keeps its own terms and credits, as marked where it appears. Nothing here
-claims it.
+- catena: CC BY-SA 4.0, from Catena's open-data layer. Those rows stay under
+  CC BY-SA, not section 2. BY-SA and BY-NC material cannot be combined
+  into one adapted dataset, so export them as separate files.
+- barth-cd: pointers only. The Church Dogmatics is in copyright, and no
+  words are stored.
 
 4. PERMISSION
 
