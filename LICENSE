@@ -1,0 +1,32 @@
+RECEPTION CORPUS — RIGHTS AND REUSE
+Copyright © 2026 Wilson Pruitt. A Wroot Press work; Wroot Press is an
+imprint of Wroot Labs LLC (Texas).
+
+This is an aggregate. There is no single licence on the rows: each row's
+licence follows its source, and is given per row by the view
+`reception_licensed` (data/reception.sqlite), from data/licenses.tsv.
+
+1. PUBLIC DOMAIN — NOT CLAIMED
+
+Public-domain commentary (JFB, Matthew Henry, Barnes, Calvin, the Catena
+aurea in the Oxford translation, Wesley's Explanatory Notes) is not
+claimed. Rows from JFB, Henry, Barnes and Calvin store locations only.
+
+2. THE COMPILATION — CC BY 4.0
+
+This project's own work — the verse keys and their normalization, the
+overlap columns, the ingest and alignment, the RCL normalization, and the
+code — is licensed under CC BY 4.0.
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+3. ROWS UNDER OTHER LICENCES
+
+- glossa-ordinaria: CC BY-NC 4.0 (the in-house English of migne.app).
+- catena: CC BY-SA 4.0 (Catena's open-data layer).
+- barth-cd: pointers only; the Church Dogmatics is in copyright and no
+  words are stored.
+
+These licences do not combine into one adapted dataset (BY-NC and BY-SA
+are incompatible). Export them as separate files under their own terms.
+
+Contact: wilson@wrootlabs.com

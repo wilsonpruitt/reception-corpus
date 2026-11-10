@@ -1,0 +1,10 @@
+source	license	stores_text	note
+jfb	public-domain	no	Jamieson-Fausset-Brown (1871); index rows point to CCEL, no text stored
+matthew-henry	public-domain	no	Matthew Henry (1706-21); index rows point to CCEL, no text stored
+barnes	public-domain	no	Albert Barnes, Notes; index rows point to CCEL, no text stored
+calvin	public-domain	no	Calvin Translation Society (1840s-50s); index rows point to CCEL, no text stored
+catena-aurea	public-domain	yes	Aquinas, Catena aurea, Oxford translation (1841-45, Newman ed.), via CCEL; PD text, not claimed
+wesley-notes	public-domain	yes	Wesley, Explanatory Notes (1755-66), via kjv-wesley; PD text, not claimed
+glossa-ordinaria	CC-BY-NC-4.0	yes	in-house English of the Glossa (migne.app, ~/patrologia); Wroot Press corpus rule; Latin PD
+catena	CC-BY-SA-4.0	yes	Scripture-on-Scripture echoes from Catena's open-data layer (catena.wrootpress.com, public/data/LICENSE.txt)
+barth-cd	pointer-only	no	Barth, Church Dogmatics, in copyright; locations only, no words stored
